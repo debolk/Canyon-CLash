@@ -26,14 +26,14 @@ public class EffectManager : MonoBehaviour
 		if (inLocal)
 			EffectManager.GetSingleton().ExplosionRPC(inPos);
 		else
-			EffectManager.GetSingleton().networkView.RPC("ExplosionRPC", RPCMode.All, inPos);
+			EffectManager.GetSingleton().GetComponent<NetworkView>().RPC("ExplosionRPC", RPCMode.All, inPos);
 	}
 
 	[RPC]
 	void ExplosionRPC(Vector3 inPos)
 	{
 		mExplosion.transform.position = inPos;
-		mExplosion.particleEmitter.Emit(200);
+		mExplosion.GetComponent<ParticleEmitter>().Emit(200);
 
 		SoundManager.GetSingleton().Spawn3DSound(SFXType.Explosion, inPos,45,2500);
 	}

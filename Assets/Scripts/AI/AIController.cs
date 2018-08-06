@@ -47,7 +47,7 @@ public class AIController : MonoBehaviour
 		mInControl = false;
 		mReversedControls = false;
 		mTargetPickup = null;
-		transform.Find("GRP_InvertedControls/InvertedControls").renderer.enabled = false;
+		transform.Find("GRP_InvertedControls/InvertedControls").GetComponent<Renderer>().enabled = false;
 	}
 
 	void FixedUpdate()
@@ -57,25 +57,25 @@ public class AIController : MonoBehaviour
 			//accelerate
 			mPlayer.Thrust(mThrust);
 
-			Profiler.BeginSample("AI_UpdatePreferredDir");
+			UnityEngine.Profiling.Profiler.BeginSample("AI_UpdatePreferredDir");
 			UpdatePreferredDir();
-			Profiler.EndSample();
+			UnityEngine.Profiling.Profiler.EndSample();
 
-			Profiler.BeginSample("AI_UpdatePickupLogic");
+			UnityEngine.Profiling.Profiler.BeginSample("AI_UpdatePickupLogic");
 			UpdatePickupLogic();
-			Profiler.EndSample();
+			UnityEngine.Profiling.Profiler.EndSample();
 
-			Profiler.BeginSample("AI_UpdateSteering");
+			UnityEngine.Profiling.Profiler.BeginSample("AI_UpdateSteering");
 			UpdateSteering();
-			Profiler.EndSample();
+			UnityEngine.Profiling.Profiler.EndSample();
 
-			Profiler.BeginSample("AI_UpdatePickupUsage");
+			UnityEngine.Profiling.Profiler.BeginSample("AI_UpdatePickupUsage");
 			UpdatePickupUsage();
-			Profiler.EndSample();
+			UnityEngine.Profiling.Profiler.EndSample();
 
-			Profiler.BeginSample("AI_UpdateGliderUsage");
+			UnityEngine.Profiling.Profiler.BeginSample("AI_UpdateGliderUsage");
 			UpdateGliderUsage();
-			Profiler.EndSample();
+			UnityEngine.Profiling.Profiler.EndSample();
 
 			//if (!goingTowardsCenter && angleAwayFromStraight > 10 && rigidbody.velocity > 50)
 				//mPlayer.Brake();
@@ -103,7 +103,7 @@ public class AIController : MonoBehaviour
 			timeInHover = 0;
 
 			//see if the path is going down fast, and we are in the air
-			Vector3 dirAhead = PathUtils.CalcDirectionAhead(transform.position, rigidbody.velocity.magnitude * 0.25f,gameObject);
+			Vector3 dirAhead = PathUtils.CalcDirectionAhead(transform.position, GetComponent<Rigidbody>().velocity.magnitude * 0.25f,gameObject);
 
 			if (dirAhead.y < -0.25f)
 			{
@@ -244,7 +244,7 @@ public class AIController : MonoBehaviour
 		Vector3 diffToCenterOfPath = currentNode.GetVectorToPath(transform.position);
 
 		//calculate the direction a while ahead of the player sort of looking in front
-		float amountToLookAhead = Mathf.Lerp(rigidbody.velocity.magnitude*0.1f, rigidbody.velocity.magnitude, mPersonality.mEarlySteer);
+		float amountToLookAhead = Mathf.Lerp(GetComponent<Rigidbody>().velocity.magnitude*0.1f, GetComponent<Rigidbody>().velocity.magnitude, mPersonality.mEarlySteer);
 		Vector3 directionAhead = PathUtils.CalcDirectionAhead(transform.position, amountToLookAhead,gameObject); //the faster we go, the further we have to look in front
 
 		//calculate how much we are nearing an edge and want to go away from it
@@ -272,16 +272,16 @@ public class AIController : MonoBehaviour
 			Vector3 diffToPickup	= mTargetPickup.transform.position - transform.position;
 			Vector3 dirToPickup		= diffToPickup.normalized;
 			float   distToPickup	= diffToPickup.magnitude;
-			Vector3 directionAhead	= PathUtils.CalcDirectionAhead(transform.position, rigidbody.velocity.magnitude*2,gameObject); //the faster we go, the further we have to look in front
+			Vector3 directionAhead	= PathUtils.CalcDirectionAhead(transform.position, GetComponent<Rigidbody>().velocity.magnitude*2,gameObject); //the faster we go, the further we have to look in front
 			Debug.DrawLine(transform.position, transform.position + directionAhead * 5, Color.magenta);
 
 			Vector3 mirroredDirection = -Vector3.Reflect(directionAhead, dirToPickup);
 
 			//we start pre-steering as soon as the pickup is nearer than rigidbody.magnitude
 			//the pre-steer ends at dist 0
-			float fullPreSteerDist = rigidbody.velocity.magnitude*0.75f;
+			float fullPreSteerDist = GetComponent<Rigidbody>().velocity.magnitude*0.75f;
 
-			float preSteerFactor = ((distToPickup - rigidbody.velocity.magnitude * 0.1f) - fullPreSteerDist) / fullPreSteerDist;
+			float preSteerFactor = ((distToPickup - GetComponent<Rigidbody>().velocity.magnitude * 0.1f) - fullPreSteerDist) / fullPreSteerDist;
 
 			if (preSteerFactor > 0.0f)
 			{
@@ -316,7 +316,7 @@ public class AIController : MonoBehaviour
 
 	IEnumerator ReverseControls()
 	{
-		transform.Find("GRP_InvertedControls/InvertedControls").renderer.enabled = true;
+		transform.Find("GRP_InvertedControls/InvertedControls").GetComponent<Renderer>().enabled = true;
 
 		float totaltime = 5.0f;
 		float disorrienttime = 0.5f;
@@ -332,7 +332,7 @@ public class AIController : MonoBehaviour
 		yield return new WaitForSeconds(disorrienttime);
 		mReversedControls = false;
 
-		transform.Find("GRP_InvertedControls/InvertedControls").renderer.enabled = false;
+		transform.Find("GRP_InvertedControls/InvertedControls").GetComponent<Renderer>().enabled = false;
 	}
 
 	[RPC]

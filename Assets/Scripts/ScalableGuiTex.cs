@@ -32,7 +32,7 @@ public class ScalableGuiTex : MonoBehaviour
 
 	void Update () 
 	{
-		if (guiTexture)
+		if (GetComponent<GUITexture>())
 		{
 			float width = Screen.width * widthPercentage;
 			float height = Screen.height * heightPerecentage;
@@ -58,7 +58,7 @@ public class ScalableGuiTex : MonoBehaviour
 
 			Rect imageRect = new Rect(addedPixelsX, addedPixelsY, width, height);
 
-			guiTexture.pixelInset = imageRect;
+			GetComponent<GUITexture>().pixelInset = imageRect;
 		}
 	}
 }

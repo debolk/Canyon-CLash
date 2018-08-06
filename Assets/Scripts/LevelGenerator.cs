@@ -200,7 +200,7 @@ public class LevelGenerator : MonoBehaviour
 		else
 		{
 			newchunk = (Transform)Network.Instantiate(chunk, mCurrentPos, rot, 1);
-			newchunk.networkView.RPC("SetChunkNumber", RPCMode.OthersBuffered ,chunkNumber);
+			newchunk.GetComponent<NetworkView>().RPC("SetChunkNumber", RPCMode.OthersBuffered ,chunkNumber);
 		}
 
 		mCurrentPos += rot * chunk.GetComponent<LevelChunk>().ChunkEndPoint;
@@ -220,7 +220,7 @@ public class LevelGenerator : MonoBehaviour
 			}
 			else
 			{
-				Network.RemoveRPCs(go.networkView.viewID);
+				Network.RemoveRPCs(go.GetComponent<NetworkView>().viewID);
 				Network.Destroy(go.gameObject);
 			}
 		}

@@ -34,7 +34,7 @@ public class CameraFacingBillboard : MonoBehaviour
 
 	void Update()
 	{
-		if (amActive && renderer.enabled)
+		if (amActive && GetComponent<Renderer>().enabled)
 		{
 			myContainer.transform.LookAt(myContainer.transform.position + m_Camera.transform.forward, m_Camera.transform.rotation * Vector3.up);
 		}

@@ -37,7 +37,7 @@ public class Notifier : MonoBehaviour
 	void AddTextNetworked(string inText)
 	{
 		AddText(inText);
-		networkView.RPC("AddText", RPCMode.Others, inText);
+		GetComponent<NetworkView>().RPC("AddText", RPCMode.Others, inText);
 	}
 
 	static public void LocalNotify(string inText) //notification only displayed on this client
@@ -71,13 +71,13 @@ public class Notifier : MonoBehaviour
 	{
 		if(!Utils.IsABot(inTarget)) //cannot notify a bot
 		{
-			if (inTarget.networkView.isMine)
+			if (inTarget.GetComponent<NetworkView>().isMine)
 			{
 				GetSingleton().StartCoroutine(GetSingleton().BigNotify(inNotifyText)); //dont need to send it over internet
 			}
 			else
 			{
-				GetSingleton().networkView.RPC("TriggerBigNotify", RPCMode.Others, inTarget.networkView.viewID, inNotifyText);
+				GetSingleton().GetComponent<NetworkView>().RPC("TriggerBigNotify", RPCMode.Others, inTarget.GetComponent<NetworkView>().viewID, inNotifyText);
 			}
 		}
 	}
@@ -91,7 +91,7 @@ public class Notifier : MonoBehaviour
 	void TriggerBigNotify(NetworkViewID ID, string notifytext)
 	{
 		GameObject target = Utils.GetPlayerFromID(ID);
-		if (target.networkView.isMine)
+		if (target.GetComponent<NetworkView>().isMine)
 		{
 			StartCoroutine(BigNotify(notifytext));
 		}

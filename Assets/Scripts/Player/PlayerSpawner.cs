@@ -16,7 +16,7 @@ public class PlayerSpawner : MonoBehaviour
 	{
 		if (!Network.isServer)
 		{
-			networkView.RPC("RequestServerSpawnLocation", RPCMode.Server);
+			GetComponent<NetworkView>().RPC("RequestServerSpawnLocation", RPCMode.Server);
 		}
 		else
 		{
@@ -28,7 +28,7 @@ public class PlayerSpawner : MonoBehaviour
 	void RequestServerSpawnLocation(NetworkMessageInfo info)
 	{
 		//reply to the sender with a valid spawn location
-		networkView.RPC("SpawnAt", info.sender, GetNextSpawnSpot(), false);
+		GetComponent<NetworkView>().RPC("SpawnAt", info.sender, GetNextSpawnSpot(), false);
 	}
 
 	[RPC]
@@ -37,7 +37,7 @@ public class PlayerSpawner : MonoBehaviour
 		//spawn player instance at location
 		Vector3 spawnPos = GetSpawnPos(inSpotNumber);
 		Transform newplayer = (Transform)Network.Instantiate(playerPrefab, spawnPos, transform.rotation, 2);
-		newplayer.gameObject.networkView.RPC("InstantiatePlayer", RPCMode.AllBuffered, inABot, inSpotNumber);
+		newplayer.gameObject.GetComponent<NetworkView>().RPC("InstantiatePlayer", RPCMode.AllBuffered, inABot, inSpotNumber);
 	}
 
 	void SpawnBot()

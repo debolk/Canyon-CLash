@@ -27,7 +27,7 @@ public class PickupCrate : MonoBehaviour
 
 			tag = "Pickup";
 
-			renderer.material.color = Color.black;
+			GetComponent<Renderer>().material.color = Color.black;
 			transform.localScale *= 1.25f;
 		}
 
@@ -63,7 +63,7 @@ public class PickupCrate : MonoBehaviour
 		if (mEnabled && other.tag == "Player")
 		{
 			//check if this player is controlled locally
-			if (other.networkView.isMine)
+			if (other.GetComponent<NetworkView>().isMine)
 			{
 				//keep the player that collided in mind
 				mLastCollidedWith = other.gameObject;
@@ -72,7 +72,7 @@ public class PickupCrate : MonoBehaviour
 				if (Network.isServer)
 					PickedUp(new NetworkMessageInfo());
 				else
-					networkView.RPC("PickedUp", RPCMode.Server);
+					GetComponent<NetworkView>().RPC("PickedUp", RPCMode.Server);
 
 				//locally already disable the pickup if we are client
 				if(Network.isClient)
@@ -86,7 +86,7 @@ public class PickupCrate : MonoBehaviour
 		yield return new WaitForSeconds(mRespawnTime);
 
 		//enable this pickup everywhere
-		networkView.RPC("Enable", RPCMode.All);
+		GetComponent<NetworkView>().RPC("Enable", RPCMode.All);
 	}
 
 	[RPC]
@@ -123,12 +123,12 @@ public class PickupCrate : MonoBehaviour
 			NetworkPlayer sender = info.sender;
 
 			if (info.timestamp != 0) //is the player that called this one of the clients
-				networkView.RPC("GivePlayerPickup", sender);
+				GetComponent<NetworkView>().RPC("GivePlayerPickup", sender);
 			else //or is it the server itself
 				GivePlayerPickup();
 
 			//disable this pickup everywhere
-			networkView.RPC("Disable", RPCMode.All);
+			GetComponent<NetworkView>().RPC("Disable", RPCMode.All);
 		}
 	}
 

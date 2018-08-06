@@ -17,7 +17,7 @@ public class Rocket : MonoBehaviour
 		SoundManager.GetSingleton().Spawn3DSound(SFXType.RocketLaunch, gameObject).volume = 0.75f;
 
 		if (SoundManager.GetSingleton().toggleSFX)
-			audio.Play();
+			GetComponent<AudioSource>().Play();
 	}
 
 	void FixedUpdate() 
@@ -27,7 +27,7 @@ public class Rocket : MonoBehaviour
 		mVelocity *= 0.96f;
 
 		//check if we will hit a wall (airstrikes ignore this)
-		if (networkView.isMine && !mAirStrike)
+		if (GetComponent<NetworkView>().isMine && !mAirStrike)
 		{
 			RaycastHit hit;
 
@@ -53,7 +53,7 @@ public class Rocket : MonoBehaviour
 			transform.position += transform.forward * mVelocity * Time.fixedDeltaTime;
 
 			//get a target
-			if (networkView.isMine && !mTarget)
+			if (GetComponent<NetworkView>().isMine && !mTarget)
 			{
 				int numIgnorers = 1;
 
@@ -88,7 +88,7 @@ public class Rocket : MonoBehaviour
 				if (target)
 				{
 					mTarget = target;
-					networkView.RPC("SetTarget", RPCMode.Others, target.networkView.viewID);
+					GetComponent<NetworkView>().RPC("SetTarget", RPCMode.Others, target.GetComponent<NetworkView>().viewID);
 				}
 			}
 
@@ -117,7 +117,7 @@ public class Rocket : MonoBehaviour
 		}
 
 		//see if we hit our target
-		if(mTarget && networkView.isMine)
+		if(mTarget && GetComponent<NetworkView>().isMine)
 		{
 			float dist = (mTarget.transform.position-transform.position).magnitude;
 			if (dist < 6.0f && !mExploded )
@@ -127,10 +127,10 @@ public class Rocket : MonoBehaviour
 				if (mTarget.GetComponent<PlayerPickupManager>().GetHit()) //see if the player is protected by armor
 				{
 					//tell this player to get hit
-					if (mTarget.networkView.isMine)
-						Explosion(mTarget.networkView.viewID);
+					if (mTarget.GetComponent<NetworkView>().isMine)
+						Explosion(mTarget.GetComponent<NetworkView>().viewID);
 					else
-						networkView.RPC("Explosion", RPCMode.Others, mTarget.networkView.viewID);
+						GetComponent<NetworkView>().RPC("Explosion", RPCMode.Others, mTarget.GetComponent<NetworkView>().viewID);
 
 					//spawn an explosion
 					EffectManager.TriggerExplosion(transform.position, false);
@@ -175,16 +175,16 @@ public class Rocket : MonoBehaviour
 	{
 		GameObject target = Utils.GetPlayerFromID(targetID);
 
-		if (target.networkView.isMine)
+		if (target.GetComponent<NetworkView>().isMine)
 		{
 			//reduce player velocity
-			target.rigidbody.velocity *= 0.5f;
+			target.GetComponent<Rigidbody>().velocity *= 0.5f;
 
 			//send the player upward
-			target.rigidbody.velocity += new Vector3(0, 20, 0);
+			target.GetComponent<Rigidbody>().velocity += new Vector3(0, 20, 0);
 
 			//spin the player
-			target.rigidbody.AddTorque(Random.onUnitSphere * 1000);
+			target.GetComponent<Rigidbody>().AddTorque(Random.onUnitSphere * 1000);
 
 			Network.Destroy(gameObject);
 		}

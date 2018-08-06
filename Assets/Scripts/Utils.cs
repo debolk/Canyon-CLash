@@ -73,7 +73,7 @@ public class Utils : MonoBehaviour
 		//find the player object that belongs to this networkviewid
 		foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			if (player.networkView.viewID == playerID)
+			if (player.GetComponent<NetworkView>().viewID == playerID)
 			{
 				return player;
 			}
@@ -88,7 +88,7 @@ public class Utils : MonoBehaviour
 		//find the player object that belongs to this networkviewid
 		foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			if (player.networkView.owner == inNetworkPlayer)
+			if (player.GetComponent<NetworkView>().owner == inNetworkPlayer)
 			{
 				return player;
 			}
@@ -107,7 +107,7 @@ public class Utils : MonoBehaviour
 		//find the player object that this client controls
 		foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			if (player.networkView.isMine && player.GetComponent<AIController>() == null)
+			if (player.GetComponent<NetworkView>().isMine && player.GetComponent<AIController>() == null)
 			{
 				mLocalPlayer = player;
 				return player;
@@ -122,11 +122,11 @@ public class Utils : MonoBehaviour
 	{
 		if (inAllowBots)
 		{
-			return inPlayer.networkView.isMine;
+			return inPlayer.GetComponent<NetworkView>().isMine;
 		}
 		else
 		{
-			if (inPlayer.networkView.isMine && inPlayer.GetComponent<AIController>() == null)
+			if (inPlayer.GetComponent<NetworkView>().isMine && inPlayer.GetComponent<AIController>() == null)
 				return true;
 			return false;
 		}

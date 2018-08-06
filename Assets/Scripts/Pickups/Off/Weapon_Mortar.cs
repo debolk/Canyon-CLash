@@ -42,7 +42,7 @@ public class Weapon_Mortar : MonoBehaviour
 				//Spawn a rocket!
 				GameObject rocket = (GameObject)Network.Instantiate(Resources.Load("Rocket"), player.transform.position + Vector3.up * (50 + Random.Range(-20, 20)), Quaternion.Euler(-90, 0, 0), 3);
 
-				rocket.networkView.RPC("SetAirTarget", RPCMode.All, player.networkView.viewID);
+				rocket.GetComponent<NetworkView>().RPC("SetAirTarget", RPCMode.All, player.GetComponent<NetworkView>().viewID);
 
 				rocket.GetComponent<Rocket>().SetOrigin(gameObject);
 			}

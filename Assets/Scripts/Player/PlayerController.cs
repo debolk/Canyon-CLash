@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 		mInControl = false;
 		mReversedControls = false;
 		StopAllCoroutines();
-		transform.Find("GRP_InvertedControls/InvertedControls").renderer.enabled = false;
+		transform.Find("GRP_InvertedControls/InvertedControls").GetComponent<Renderer>().enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
 		if (Utils.IsLocalPlayer(gameObject, false))
 			SoundManager.GetSingleton().Spawn2DSound(SFXType.InvertControls);
 
-		transform.Find("GRP_InvertedControls/InvertedControls").renderer.enabled = true;
+		transform.Find("GRP_InvertedControls/InvertedControls").GetComponent<Renderer>().enabled = true;
 
 		yield return new WaitForSeconds(0.2f);
 		mReversedControls = true;
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
 		yield return new WaitForSeconds(0.2f);
 		mReversedControls = false;
 
-		transform.Find("GRP_InvertedControls/InvertedControls").renderer.enabled = false;
+		transform.Find("GRP_InvertedControls/InvertedControls").GetComponent<Renderer>().enabled = false;
 	}
 
 	[RPC]

@@ -10,7 +10,7 @@ public class Hook : MonoBehaviour
 
 	void Start () 
 	{
-		if(networkView.isMine)
+		if(GetComponent<NetworkView>().isMine)
 			StartCoroutine(WaitForRemove());
 
 		startTime = Time.realtimeSinceStartup;
@@ -32,16 +32,16 @@ public class Hook : MonoBehaviour
 
 			if (Utils.IsLocalPlayer(origin,true))
 			{
-				origin.rigidbody.AddForce(force); //pull the player forward
+				origin.GetComponent<Rigidbody>().AddForce(force); //pull the player forward
 			}
 
 			if (Utils.IsLocalPlayer(target, true))
 			{
-				target.rigidbody.AddForce(-force*2); //pull the enemy back
+				target.GetComponent<Rigidbody>().AddForce(-force*2); //pull the enemy back
 			}
 
 			float timeAlive = Time.realtimeSinceStartup-startTime;
-			if (networkView.isMine && (diff.magnitude < 20 || diff.magnitude > 150) && timeAlive > 1.0f)
+			if (GetComponent<NetworkView>().isMine && (diff.magnitude < 20 || diff.magnitude > 150) && timeAlive > 1.0f)
 			{
 				Network.Destroy(gameObject);
 			}

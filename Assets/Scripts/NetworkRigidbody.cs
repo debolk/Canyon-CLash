@@ -26,9 +26,9 @@ public class NetworkRigidbody : MonoBehaviour
 		// Send data to server
 		if (stream.isWriting)
 		{
-			Vector3 pos = rigidbody.position;
-			Quaternion rot = rigidbody.rotation;
-			Vector3 velocity = rigidbody.velocity;
+			Vector3 pos = GetComponent<Rigidbody>().position;
+			Quaternion rot = GetComponent<Rigidbody>().rotation;
+			Vector3 velocity = GetComponent<Rigidbody>().velocity;
 			//Vector3 angularVelocity = rigidbody.angularVelocity;
 			float turnspeed = GetComponent<PlayerPhysics>().GetTurnSpeed();
 
@@ -142,15 +142,15 @@ public class NetworkRigidbody : MonoBehaviour
 
 				Vector3 preferedpos = latest.pos + latest.velocity * extrapolationLength;
 
-				float maxExtrapolationDist = rigidbody.velocity.magnitude * 0.5f;
+				float maxExtrapolationDist = GetComponent<Rigidbody>().velocity.magnitude * 0.5f;
 				if ((transform.position - preferedpos).magnitude < maxExtrapolationDist)
 					transform.position -= (transform.position - preferedpos) * 0.1f;
 				else
 					transform.position = preferedpos;
 
-				rigidbody.rotation = Quaternion.Slerp(rigidbody.rotation, preferedrot, 0.3f);
+				GetComponent<Rigidbody>().rotation = Quaternion.Slerp(GetComponent<Rigidbody>().rotation, preferedrot, 0.3f);
 
-				rigidbody.velocity = latest.velocity;
+				GetComponent<Rigidbody>().velocity = latest.velocity;
 				//rigidbody.angularVelocity = latest.angularVelocity;
 			}
 		}

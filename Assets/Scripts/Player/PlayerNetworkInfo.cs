@@ -55,7 +55,7 @@ public class PlayerNetworkInfo : MonoBehaviour
 		{
 			GetComponent<NetworkRigidbody>().enabled = false;
 			GetComponent<PlayerPhysics>().enabled = true;
-			rigidbody.useGravity = true;
+			GetComponent<Rigidbody>().useGravity = true;
 
 			string myName = "";
 
@@ -78,11 +78,11 @@ public class PlayerNetworkInfo : MonoBehaviour
 			
 			//notify others of the name
 			SetName(myName);
-			networkView.RPC("SetName", RPCMode.OthersBuffered, myName);
+			GetComponent<NetworkView>().RPC("SetName", RPCMode.OthersBuffered, myName);
 
 			//assign a random texture
 			int texture = Random.Range(1, 7);
-			networkView.RPC("SetTexture", RPCMode.AllBuffered, texture);
+			GetComponent<NetworkView>().RPC("SetTexture", RPCMode.AllBuffered, texture);
 		}
 		// This is just some remote controlled player, don't execute direct
 		// user input on this
@@ -91,7 +91,7 @@ public class PlayerNetworkInfo : MonoBehaviour
 			name += " (Remote)";
 			GetComponent<NetworkRigidbody>().enabled = true;
 			GetComponent<PlayerPhysics>().enabled = false;
-			rigidbody.useGravity = false;
+			GetComponent<Rigidbody>().useGravity = false;
 
 			//we will get the name from the client that owns this player
 		}
@@ -103,12 +103,12 @@ public class PlayerNetworkInfo : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (networkView.isMine) //only execute on the player object that belongs to this network player
+		if (GetComponent<NetworkView>().isMine) //only execute on the player object that belongs to this network player
 		{
 			if ((Input.GetButton("GetReady") || Utils.IsABot(gameObject))&& !mReady)
 			{
 				PlayerReady();
-				networkView.RPC("PlayerReady", RPCMode.OthersBuffered);
+				GetComponent<NetworkView>().RPC("PlayerReady", RPCMode.OthersBuffered);
 			}
 
 			//code only the server executes
@@ -129,7 +129,7 @@ public class PlayerNetworkInfo : MonoBehaviour
 
 					//tell all players to start
 					StartGame();
-					networkView.RPC("StartGame", RPCMode.Others);
+					GetComponent<NetworkView>().RPC("StartGame", RPCMode.Others);
 				}
 			}
 		}
@@ -154,7 +154,7 @@ public class PlayerNetworkInfo : MonoBehaviour
 				RestartGame();
 			}
 
-			if (networkView.isMine)
+			if (GetComponent<NetworkView>().isMine)
 			{
 				float addedY = 0;
 
@@ -233,8 +233,8 @@ public class PlayerNetworkInfo : MonoBehaviour
 
 		transform.position = GameObject.Find("_MAINGAMEOBJECT").GetComponent<PlayerSpawner>().GetSpawnPos(mSpawnSpot);
 		transform.rotation = Quaternion.identity;
-		rigidbody.velocity = Vector3.zero;
-		rigidbody.angularVelocity = Vector3.zero;
+		GetComponent<Rigidbody>().velocity = Vector3.zero;
+		GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -245,7 +245,7 @@ public class PlayerNetworkInfo : MonoBehaviour
 
 			GetComponent<PlayerPlace>().LockPlayerPlace();
 
-			networkView.RPC("CrossedFinish", RPCMode.All, mRaceTime);
+			GetComponent<NetworkView>().RPC("CrossedFinish", RPCMode.All, mRaceTime);
 		}
 	}
 
@@ -315,7 +315,7 @@ public class PlayerNetworkInfo : MonoBehaviour
 			int playerSpot = player.GetComponent<PlayerPlace>().GetPlace();
 			int spawnSpot = numPlayers - playerSpot;
 
-			player.networkView.RPC("RestartGameRPC", RPCMode.All, spawnSpot);
+			player.GetComponent<NetworkView>().RPC("RestartGameRPC", RPCMode.All, spawnSpot);
 		}
 	}
 
@@ -371,7 +371,7 @@ public class PlayerNetworkInfo : MonoBehaviour
 	void SetTexture(int inTexture)
 	{
 		string textureString = "VehicleTextures/playerVehicle_0" + inTexture;
-		transform.Find("playerVehicle").renderer.material.mainTexture = (Texture)Resources.Load(textureString);
+		transform.Find("playerVehicle").GetComponent<Renderer>().material.mainTexture = (Texture)Resources.Load(textureString);
 	}
 
 	public string GetMyName() { return mName; }

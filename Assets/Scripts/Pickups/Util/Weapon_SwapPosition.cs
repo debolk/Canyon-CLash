@@ -44,11 +44,11 @@ public class Weapon_SwapPosition : MonoBehaviour
 		yield return new WaitForSeconds(0.7f);
 
 		//swap current player to other player, and disable other player's collision really shortly
-		GetComponent<PlayerPickupManager>().SwapWithPlayer(target.networkView.viewID);
+		GetComponent<PlayerPickupManager>().SwapWithPlayer(target.GetComponent<NetworkView>().viewID);
 		
 		//swap other player to me
-		if (!target.networkView.isMine)
-			target.networkView.RPC("SwapWithPlayer", RPCMode.Others, networkView.viewID); //we send to all clients and ask ownership locally, because networkview.owner cannot be trusted!
+		if (!target.GetComponent<NetworkView>().isMine)
+			target.GetComponent<NetworkView>().RPC("SwapWithPlayer", RPCMode.Others, GetComponent<NetworkView>().viewID); //we send to all clients and ask ownership locally, because networkview.owner cannot be trusted!
 
 		Destroy(this);
 	}

@@ -36,7 +36,7 @@ public class Weapon_GrapplingHook: MonoBehaviour
 
 				//graphical representation
 				GameObject hook = (GameObject)Network.Instantiate(Resources.Load("Hook"), Vector3.zero, Quaternion.identity, 3);
-				hook.networkView.RPC("SetTargets", RPCMode.All, networkView.viewID, target.networkView.viewID);
+				hook.GetComponent<NetworkView>().RPC("SetTargets", RPCMode.All, GetComponent<NetworkView>().viewID, target.GetComponent<NetworkView>().viewID);
 
 				Destroy(this);
 			}

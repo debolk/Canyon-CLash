@@ -53,12 +53,12 @@ public class SoundManager : MonoBehaviour
 		//update player hover sounds
 		foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			float vel = player.rigidbody.velocity.magnitude;
+			float vel = player.GetComponent<Rigidbody>().velocity.magnitude;
 			float lerpFactor = Mathf.InverseLerp(0, 150.0f, vel);
 			float targetPitch = Mathf.Lerp(0.5f, 3.0f, lerpFactor);
 			float targetVolume = Mathf.InverseLerp(-50, 50.0f, vel);
 
-			AudioSource hoverSound = player.transform.Find("HoverSound").audio;
+			AudioSource hoverSound = player.transform.Find("HoverSound").GetComponent<AudioSource>();
 			hoverSound.pitch -= (hoverSound.pitch - targetPitch) * 0.05f;
 			hoverSound.volume -= (hoverSound.volume - targetVolume) * 0.05f;
 			hoverSound.mute = !toggleSFX;

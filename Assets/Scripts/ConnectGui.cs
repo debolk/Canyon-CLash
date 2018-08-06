@@ -24,7 +24,7 @@ public class ConnectGui : MonoBehaviour
 
 		if (Network.peerType == NetworkPeerType.Disconnected)
 		{
-			GameObject.Find("MainMenuImage").guiTexture.enabled = true;
+			GameObject.Find("MainMenuImage").GetComponent<GUITexture>().enabled = true;
 
 			GUILayout.Space(10);
 			GUILayout.BeginHorizontal();
@@ -110,7 +110,7 @@ public class ConnectGui : MonoBehaviour
 		}
 		else
 		{
-			GameObject.Find("MainMenuImage").guiTexture.enabled = false;
+			GameObject.Find("MainMenuImage").GetComponent<GUITexture>().enabled = false;
 
 			if (Network.isServer)
 			{

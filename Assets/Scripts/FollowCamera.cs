@@ -36,7 +36,7 @@ public class FollowCamera : MonoBehaviour
 		newrandomframecount++;
 		if (newrandomframecount > 2 && target)
 		{
-			mTargetRandomAdd = Random.onUnitSphere * target.rigidbody.velocity.magnitude * 0.001f; ;
+			mTargetRandomAdd = Random.onUnitSphere * target.GetComponent<Rigidbody>().velocity.magnitude * 0.001f; ;
 			newrandomframecount = 0;
 		}
 
@@ -44,10 +44,10 @@ public class FollowCamera : MonoBehaviour
 
 		if (!backCamera && target)
 		{
-			float vel = target.rigidbody.velocity.magnitude;
+			float vel = target.GetComponent<Rigidbody>().velocity.magnitude;
 			float fovmult = Mathf.InverseLerp(70, 160, vel);
 			float preferredFov = Mathf.Lerp(80, 130, fovmult);
-			camera.fov -= (camera.fov - preferredFov) * 0.1f;
+			GetComponent<Camera>().fov -= (GetComponent<Camera>().fov - preferredFov) * 0.1f;
 		}
 	}
 
@@ -71,15 +71,15 @@ public class FollowCamera : MonoBehaviour
 			transform.rotation = rotation;
 			transform.Rotate(xAngleOffect, 0, 0);
 
-			if (target.rigidbody && target.rigidbody.velocity.magnitude > 100 && !backCamera)
-				transform.Rotate(Random.onUnitSphere * (target.rigidbody.velocity.magnitude - 100) * 0.01f);
+			if (target.GetComponent<Rigidbody>() && target.GetComponent<Rigidbody>().velocity.magnitude > 100 && !backCamera)
+				transform.Rotate(Random.onUnitSphere * (target.GetComponent<Rigidbody>().velocity.magnitude - 100) * 0.01f);
 
 			transform.position = position;
 		}
 		else if(backCamera)
 		{
-			camera.enabled = false;
-			GameObject.Find("CamBorder").guiTexture.enabled = false;
+			GetComponent<Camera>().enabled = false;
+			GameObject.Find("CamBorder").GetComponent<GUITexture>().enabled = false;
 		}
 
 		bool inField = false;
@@ -106,8 +106,8 @@ public class FollowCamera : MonoBehaviour
 	public void SetTarget(Transform newtransform)
 	{
 		target = newtransform;
-		camera.enabled = true;
-		GameObject.Find("CamBorder").guiTexture.enabled = true;
+		GetComponent<Camera>().enabled = true;
+		GameObject.Find("CamBorder").GetComponent<GUITexture>().enabled = true;
 	}
 }
 

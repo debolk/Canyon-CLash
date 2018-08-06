@@ -116,7 +116,7 @@ public class Weapon_MachineGun : MonoBehaviour
 			}
 
 			//fire a trail
-			Vector3 startPos = mGunModel.transform.FindChild("flareholder").position;
+			Vector3 startPos = mGunModel.transform.Find("flareholder").position;
 			GameObject newTrail = (GameObject)Instantiate(mBulletTrail, startPos + mDirection * 5, Quaternion.identity);
 			newTrail.GetComponent<BulletTrail>().SetVel(mDirection.normalized * 10);
 			newTrail.GetComponent<BulletTrail>().SetMaxDist(mMaxDist);

@@ -63,7 +63,7 @@ public class Mine : MonoBehaviour
 			if (Network.isServer)
 				GotHit();
 			else
-				networkView.RPC("GotHit", RPCMode.Server);
+				GetComponent<NetworkView>().RPC("GotHit", RPCMode.Server);
 		}
 	}
 

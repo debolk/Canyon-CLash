@@ -73,18 +73,18 @@ public class PlayerPhysics : MonoBehaviour
 
 	public void Thrust(float inThrustMult)
 	{
-		rigidbody.AddForce(transform.forward * mThrustForce * inThrustMult);
+		GetComponent<Rigidbody>().AddForce(transform.forward * mThrustForce * inThrustMult);
 	}
 
 	public void Brake()
 	{
-		Vector3 localvelocity = transform.InverseTransformDirection(rigidbody.velocity);
+		Vector3 localvelocity = transform.InverseTransformDirection(GetComponent<Rigidbody>().velocity);
 
 		localvelocity.z *= 0.97f; //friction in forward direction
 		localvelocity.x *= 0.97f; //friction in forward direction
 
 		Vector3 globalvelocity = transform.TransformDirection(localvelocity);
-		rigidbody.velocity = globalvelocity;
+		GetComponent<Rigidbody>().velocity = globalvelocity;
 
 		//braking means insta-skidding
 		//mSkidding = true;
@@ -92,19 +92,19 @@ public class PlayerPhysics : MonoBehaviour
 
 	public void Boost()
 	{
-		rigidbody.AddForce(transform.forward * mBoostForce);
+		GetComponent<Rigidbody>().AddForce(transform.forward * mBoostForce);
 	}
 
 	public void Turn(float inAmount) //amount goes from -1 (full left) to 1 (full right)
 	{
 		mTurnSpeed += inAmount * mTurnAccel;
 
-		float turnspeedmult = rigidbody.velocity.magnitude/mMaxSpeedForTurning;
+		float turnspeedmult = GetComponent<Rigidbody>().velocity.magnitude/mMaxSpeedForTurning;
 		if(turnspeedmult > 1) turnspeedmult = 1;
 
 		float maxturnspeed = Mathf.Lerp(mMaxTurnSpeedAtStandStill, mMaxTurnSpeedAtFullSpeed, turnspeedmult);
 
-		if (rigidbody.velocity.magnitude < 10)
+		if (GetComponent<Rigidbody>().velocity.magnitude < 10)
 		{
 			//maxturnspeed *= rigidbody.velocity.magnitude * (1.0f/10.0f);
 		}
@@ -115,7 +115,7 @@ public class PlayerPhysics : MonoBehaviour
 
 	public void Jump()
 	{
-		rigidbody.AddForce(Vector3.up * 250);
+		GetComponent<Rigidbody>().AddForce(Vector3.up * 250);
 	}
 
 	void ApplyHoverBoard() //apply hoverboard physics
@@ -131,8 +131,8 @@ public class PlayerPhysics : MonoBehaviour
 		//in air smoothing to ground angle
 		if (mInHoverBoardMode)
 		{
-			if (rigidbody.velocity.y < 5)
-				transform.RotateAround(axisToRotateAround, angleDiff * mInAirPitchSmooth * (-rigidbody.velocity.y * 0.005f + 1.0f));
+			if (GetComponent<Rigidbody>().velocity.y < 5)
+				transform.RotateAround(axisToRotateAround, angleDiff * mInAirPitchSmooth * (-GetComponent<Rigidbody>().velocity.y * 0.005f + 1.0f));
 		}
 		else
 		{
@@ -148,18 +148,18 @@ public class PlayerPhysics : MonoBehaviour
 			//suspension calculation
 			float suspensionpress = mSuspensionHeight - mDistanceToGround;
 			float suspensionforce = suspensionpress * mSuspensionStiffness;
-			float suspensiondampingforce = mSuspensionDamping * Vector3.Dot(-rigidbody.velocity, mGroundNormal);
+			float suspensiondampingforce = mSuspensionDamping * Vector3.Dot(-GetComponent<Rigidbody>().velocity, mGroundNormal);
 
 			//add suspension force
 			float totalforce = suspensionforce + suspensiondampingforce;
-			rigidbody.AddForce(mGroundNormal * totalforce);
+			GetComponent<Rigidbody>().AddForce(mGroundNormal * totalforce);
 		}
 
 		//sideways friction code
 		if (mOnGround || !mInHoverBoardMode)
 		{
 			//get the velocity in local space
-			Vector3 localvelocity = transform.InverseTransformDirection(rigidbody.velocity);
+			Vector3 localvelocity = transform.InverseTransformDirection(GetComponent<Rigidbody>().velocity);
 
 			//Debug.DrawLine(transform.position, transform.position + rigidbody.velocity * 2, Color.red);
 			//Debug.DrawLine(transform.position, transform.position + transform.forward*localvelocity.z * 2, Color.green);
@@ -194,10 +194,10 @@ public class PlayerPhysics : MonoBehaviour
 
 			//convert it back to global velocity
 			Vector3 globalvelocity = transform.TransformDirection(localvelocity);
-			rigidbody.velocity = globalvelocity;
+			GetComponent<Rigidbody>().velocity = globalvelocity;
 		}
 
-		rigidbody.velocity *= mAirFrictionMultiplier;
+		GetComponent<Rigidbody>().velocity *= mAirFrictionMultiplier;
 
 		transform.RotateAroundLocal(Vector3.up, Mathf.Deg2Rad*mTurnSpeed);
 
@@ -223,12 +223,12 @@ public class PlayerPhysics : MonoBehaviour
 		//lift
 		//if(rigidbody.velocity.y <= 0)
 
-		float speedLiftForce = rigidbody.velocity.magnitude * mLiftForce;
+		float speedLiftForce = GetComponent<Rigidbody>().velocity.magnitude * mLiftForce;
 		float constantLiftForce = 100.0f * mLiftForce;
 
 		float liftForce = Mathf.Lerp(speedLiftForce, constantLiftForce, 0.5f);
 
-		rigidbody.AddForce(Vector3.up * liftForce); 
+		GetComponent<Rigidbody>().AddForce(Vector3.up * liftForce); 
 	}
 
 	void UpdateGroundInfo()
@@ -333,10 +333,10 @@ public class PlayerPhysics : MonoBehaviour
 		if (mInHoverBoardMode)
 		{
 			mInHoverBoardMode = false;
-			transform.Find("Glider").renderer.enabled = true;
+			transform.Find("Glider").GetComponent<Renderer>().enabled = true;
 
-			if (networkView.isMine)
-				networkView.RPC("SwitchToGlider", RPCMode.Others);
+			if (GetComponent<NetworkView>().isMine)
+				GetComponent<NetworkView>().RPC("SwitchToGlider", RPCMode.Others);
 		}
 	}
 
@@ -346,10 +346,10 @@ public class PlayerPhysics : MonoBehaviour
 		if (!mInHoverBoardMode)
 		{
 			mInHoverBoardMode = true;
-			transform.Find("Glider").renderer.enabled = false;
+			transform.Find("Glider").GetComponent<Renderer>().enabled = false;
 
-			if (networkView.isMine)
-				networkView.RPC("SwitchToBoard", RPCMode.Others);
+			if (GetComponent<NetworkView>().isMine)
+				GetComponent<NetworkView>().RPC("SwitchToBoard", RPCMode.Others);
 		}
 	}
 
@@ -362,18 +362,18 @@ public class PlayerPhysics : MonoBehaviour
 
 	IEnumerator TemporaryDisableCollider(float inSeconds)
 	{
-		collider.isTrigger = true;
+		GetComponent<Collider>().isTrigger = true;
 
 		yield return new WaitForSeconds(inSeconds);
 
-		collider.isTrigger = false;
+		GetComponent<Collider>().isTrigger = false;
 	}
 
 	void OnGUI()
 	{
 		if (Utils.IsLocalPlayer(gameObject, false))
 		{
-			GUI.Label(new Rect(250, Screen.height - 30, 500, 40), "Velocity: " + rigidbody.velocity.magnitude.ToString("N2"));
+			GUI.Label(new Rect(250, Screen.height - 30, 500, 40), "Velocity: " + GetComponent<Rigidbody>().velocity.magnitude.ToString("N2"));
 		}
 	}
 

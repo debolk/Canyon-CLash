@@ -146,7 +146,7 @@ public class PlayerPlace : MonoBehaviour
 	{
 		curExtraPos -= 1000;
 		mAddedExtraPosOnTrack = curExtraPos;
-		networkView.RPC("AddExtraTrackPos", RPCMode.Others, mAddedExtraPosOnTrack);
+		GetComponent<NetworkView>().RPC("AddExtraTrackPos", RPCMode.Others, mAddedExtraPosOnTrack);
 	}
 
 	public float GetTotalRacePercentage()

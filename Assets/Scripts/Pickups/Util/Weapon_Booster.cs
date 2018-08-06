@@ -70,7 +70,7 @@ public class Weapon_Booster : MonoBehaviour
 			curEmitter.emit = true;
 		}
 
-		transform.Find("BoostSound").audio.mute = false;
+		transform.Find("BoostSound").GetComponent<AudioSource>().mute = false;
 	}
 
 	void DisableBoost()
@@ -100,6 +100,6 @@ public class Weapon_Booster : MonoBehaviour
 			curEmitter.emit = false;
 		}
 
-		transform.Find("BoostSound").audio.mute = true;
+		transform.Find("BoostSound").GetComponent<AudioSource>().mute = true;
 	}
 }

@@ -24,11 +24,11 @@ public class Weapon_ReverseControls : MonoBehaviour
 
 			if(!Utils.IsABot(target))
 			{
-				target.networkView.RPC("TriggerReverseControls", RPCMode.All);
+				target.GetComponent<NetworkView>().RPC("TriggerReverseControls", RPCMode.All);
 			}
 			else
 			{
-				target.networkView.RPC("TriggerAIReverseControls", RPCMode.All);
+				target.GetComponent<NetworkView>().RPC("TriggerAIReverseControls", RPCMode.All);
 			}
 
 			//notify player

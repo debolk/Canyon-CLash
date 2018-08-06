@@ -67,8 +67,8 @@ public class GameGUI : MonoBehaviour
 				int pickupImg = curLevel + (int)curType * 4;
 				Texture pickupTex = mPickupIcons[pickupImg]; //needs to be fixed as soon as more pickup images come
 
-				GameObject.Find("CurrentPickup").guiTexture.enabled = true;
-				GameObject.Find("CurrentPickup").guiTexture.texture = pickupTex;
+				GameObject.Find("CurrentPickup").GetComponent<GUITexture>().enabled = true;
+				GameObject.Find("CurrentPickup").GetComponent<GUITexture>().texture = pickupTex;
 			}
 
 			mPickupLastFrame = curType;
@@ -92,12 +92,12 @@ public class GameGUI : MonoBehaviour
 					addedText = "rd";
 			}
 
-			GameObject.Find("CurrentSpotText").guiText.text = spot + addedText + " / " + playerPlace.GetNumPlayers();
+			GameObject.Find("CurrentSpotText").GetComponent<GUIText>().text = spot + addedText + " / " + playerPlace.GetNumPlayers();
 		}
 		else
 		{
-			GameObject.Find("CurrentSpotText").guiText.text = "";
-			GameObject.Find("CurrentPickup").guiTexture.enabled = false;
+			GameObject.Find("CurrentSpotText").GetComponent<GUIText>().text = "";
+			GameObject.Find("CurrentPickup").GetComponent<GUITexture>().enabled = false;
 			mPickupLevelLastFrame = -1;
 		}
 	}

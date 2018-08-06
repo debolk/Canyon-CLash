@@ -15,10 +15,10 @@ public class Weapon_Rockets : MonoBehaviour
 																							transform.forward * -5 + 
 																							transform.up * 2.5f + 
 																							transform.right * (-halfrockets + i),	transform.rotation * Quaternion.Euler(-10, (-halfrockets + i) * 3, 0), 3);
-			float startvel = rigidbody.velocity.magnitude*Random.Range(0.9f,1.1f);
+			float startvel = GetComponent<Rigidbody>().velocity.magnitude*Random.Range(0.9f,1.1f);
 
 			rocket.GetComponent<Rocket>().AddStartVelocity(startvel);
-			rocket.networkView.RPC("AddStartVelocity", RPCMode.Others, startvel);
+			rocket.GetComponent<NetworkView>().RPC("AddStartVelocity", RPCMode.Others, startvel);
 
 			rocket.GetComponent<Rocket>().SetOrigin(gameObject);
 		}

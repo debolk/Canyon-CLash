@@ -226,14 +226,14 @@ public class PlayerPickupManager : MonoBehaviour
 		if(!inGlobal)
 			AddPickupComponent(inPickupName);
 		else
-			networkView.RPC("AddPickupComponent",RPCMode.All, inPickupName);
+			GetComponent<NetworkView>().RPC("AddPickupComponent",RPCMode.All, inPickupName);
 	}
 
 	[RPC]
 	void AddPickupComponent(string inPickupName)
 	{
-		gameObject.AddComponent(inPickupName);
-	}
+        gameObject.AddComponent(System.Type.GetType(inPickupName));
+    }
 	
 	void Update() //update targetting sphere
 	{
@@ -249,16 +249,16 @@ public class PlayerPickupManager : MonoBehaviour
 				{
 					targetsphere.transform.RotateAroundLocal(Vector3.forward, 0.075f);
 					targetsphere.transform.position = target.transform.position-target.transform.forward*3+target.transform.up*2;
-					targetsphere.renderer.enabled = true;
+					targetsphere.GetComponent<Renderer>().enabled = true;
 				}
 				else
 				{
-					targetsphere.renderer.enabled = false;
+					targetsphere.GetComponent<Renderer>().enabled = false;
 				}
 			}
 			else
 			{
-				targetsphere.renderer.enabled = false;
+				targetsphere.GetComponent<Renderer>().enabled = false;
 			}
 		}
 	}
@@ -342,7 +342,7 @@ public class PlayerPickupManager : MonoBehaviour
 		bool gothit = !mHasArmor; //see if we will be hit
 
 		RemoveArmor();
-		networkView.RPC("RemoveArmor", RPCMode.Others);
+		GetComponent<NetworkView>().RPC("RemoveArmor", RPCMode.Others);
 
 		return gothit;
 	}
@@ -359,38 +359,38 @@ public class PlayerPickupManager : MonoBehaviour
 		if (inOnlyLocally)
 			MultiplySpeed(inSpeedMultiplier);
 		else
-			networkView.RPC("MultiplySpeed", RPCMode.All, inSpeedMultiplier);
+			GetComponent<NetworkView>().RPC("MultiplySpeed", RPCMode.All, inSpeedMultiplier);
 	}
 
 	[RPC]
 	void MultiplySpeed(float inSpeedMultiplier)
 	{
-		rigidbody.velocity *= inSpeedMultiplier;
+		GetComponent<Rigidbody>().velocity *= inSpeedMultiplier;
 	}
 
 	[RPC]
 	public void SwapWithPlayer(NetworkViewID targetID)
 	{
-		if (networkView.isMine) //we send to all clients and ask ownership locally, because networkview.owner cannot be trusted!
+		if (GetComponent<NetworkView>().isMine) //we send to all clients and ask ownership locally, because networkview.owner cannot be trusted!
 		{
 			GameObject target = Utils.GetPlayerFromID(targetID);
 
 			//shortly disable the collision of the target
-			if(!target.networkView.isMine) //if the target is local we dont need to disable the collider
+			if(!target.GetComponent<NetworkView>().isMine) //if the target is local we dont need to disable the collider
 				target.GetComponent<PlayerPhysics>().DisableColliderFor(0.5f);
 
 			//swap this object with the player object with targetID
 			Vector3 ourpos = transform.position;
 			Quaternion ourrot = transform.rotation;
-			Vector3 ourvel = rigidbody.velocity;
+			Vector3 ourvel = GetComponent<Rigidbody>().velocity;
 
 			transform.position = target.transform.position;
 			transform.rotation = target.transform.rotation;
-			rigidbody.velocity = target.rigidbody.velocity;
+			GetComponent<Rigidbody>().velocity = target.GetComponent<Rigidbody>().velocity;
 
 			target.transform.position = ourpos;
 			target.transform.rotation = ourrot;
-			target.rigidbody.velocity = ourvel;
+			target.GetComponent<Rigidbody>().velocity = ourvel;
 
 			if (Utils.IsLocalPlayer(gameObject, false))
 				SoundManager.GetSingleton().Spawn2DSound(SFXType.PositionSwap);
