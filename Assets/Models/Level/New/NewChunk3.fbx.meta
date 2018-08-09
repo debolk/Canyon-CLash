@@ -3,6 +3,10 @@ guid: ab4992fae8a775c43a77dfae286077cb
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
     4300000: pPlane1
     4300002: transform2
     4300004: transform3
@@ -16,6 +20,7 @@ ModelImporter:
     4300020: transform9
     4300022: transform11
     4300024: polySurface11
+    11100000: //RootNode
   materials:
     importMaterials: 1
     materialName: 3

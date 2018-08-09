@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f4ad688e353b476408be20efefa7169d
+guid: 58174a7c2fc062a44b788a40f5b379ce
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
@@ -7,7 +7,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: collision_Chunk01
+    4300000: pPlane1
     11100000: //RootNode
   materials:
     importMaterials: 1

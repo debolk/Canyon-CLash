@@ -3,8 +3,13 @@ guid: 223d018a68f71714fbe09182b8205b1d
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
     4300000: tunner2_Chunk
     4300002: tunnel2_Chunk
+    11100000: //RootNode
   materials:
     importMaterials: 1
     materialName: 3

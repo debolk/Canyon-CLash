@@ -3,7 +3,12 @@ guid: 1bdfa30b1763d8a4eb4986913bc67ead
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
     4300000: schans_Chunk
+    11100000: //RootNode
   materials:
     importMaterials: 1
     materialName: 3
